@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Summarizer</title>
+
+    <!-- BOOTSTRAP 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f2f4f7;
+        }
+        .container-box {
+            max-width: 800px;
+            margin-top: 40px;
+        }
+
+        .spinner-grow {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+        .sub-item {
+            padding: 6px 12px;
+            border-bottom: 1px solid #eee;
+            font-family: monospace;
+            color: #444;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container container-box">
+    <div class="card shadow-lg p-4">
+        <h1 class="text-center mb-4">🎬 Summarizer</h1>
+
+        <form id="videoForm">
+            <input type="text" id="text_form" class="form-control form-control-lg mb-3"
+                   placeholder="Nhập URL video YouTube..." required>
+            <select id="model_type" class="form-select form-select-lg mb-3">
+                <option value="gpt">GPT (OpenAI Summarization)</option>
+                <option value="gemini">Gemini (Google Summarization)</option>
+            </select>
+            <div class="mb-3">
+                <label class="fw-bold mb-2">Chọn phương thức chuyển giọng nói → văn bản:</label><br>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="transribe_type"
+                        id="asr_whisper" value="whisper" checked>
+                    <label class="form-check-label" for="asr_whisper">Whisper (local)</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="transribe_type"
+                        id="asr_assembly" value="assemblyai">
+                    <label class="form-check-label" for="asr_assembly">AssemblyAI (cloud)</label>
+                </div>
+            </div>
+
+            <select id="type" class="form-select form-select-lg mb-3">
+                <option value="url">URL</option>
+                <option value="text">Text</option>
+            </select>
+
+            <button class="btn btn-primary w-100 btn-lg">Tóm tắt</button>
+        </form>
+
+        <!-- Khu vực kết quả -->
+        <div id="result" class="mt-4"></div>
+
+    </div>
+</div>
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+document.getElementById("videoForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    let text_form = document.getElementById("text_form").value;
+    let model = document.getElementById("model_type").value;
+    let type = document.getElementById("type").value;
+    let transribe_type = document.querySelector('input[name="transribe_type"]:checked').value;
+
+    // Loading đẹp
+    document.getElementById("result").innerHTML = `
+        <div class="text-center py-4">
+            <div class="spinner-grow text-primary"></div>
+            <div class="spinner-grow text-primary"></div>
+            <div class="spinner-grow text-primary"></div>
+            <p class="mt-3 text-secondary">Đang phân tích video... vui lòng chờ...</p>
+        </div>
+    `;
+
+    try {
+        const response = await fetch("/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                text_form: text_form,
+                model_type: model,
+                type: type,
+                transribe_type: transribe_type
+            })
+        });
+
+        const data = await response.json();
+        console.log(data.summary);
+
+        // Render giao diện đẹp
+        document.getElementById("result").innerHTML = `
+            <div class="card mt-3 border-0 shadow-sm">
+                <div class="card-body">
+
+                    <h4 class="mb-2 text-primary fw-bold">📌 Tóm tắt nội dung</h4>
+
+                    <div class="alert alert-info">
+                        <p class="fw-bold text-dark">${data.summary}</p>
+                    </div>
+
+                    <button class="btn btn-outline-secondary btn-sm mb-3" onclick="copySummary()">
+                        📋 Copy tóm tắt
+                    </button>
+
+                    ${data.summary_audio ? `
+                    <h5 class="fw-bold mt-4">🔊 Nghe audio tóm tắt</h5>
+                    <audio controls class="w-100 mt-2">
+                        <source src="data:audio/wav;base64,${data.summary_audio}" type="audio/wav">
+                    </audio>
+                    ` : ""}
+
+                    <hr>
+
+                    <h5 class="fw-bold mb-3 mt-4">📝 Transcript đầy đủ</h5>
+
+                    <p>
+                        <button class="btn btn-secondary btn-sm" type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#transcriptCollapse">
+                            👁 Hiện / Ẩn transcript
+                        </button>
+                    </p>
+
+                    <div class="collapse" id="transcriptCollapse">
+                        <div id="subList">
+                            ${data.transcript
+                                .split("\n")
+                                .map(line => `<div class="sub-item">${line}</div>`)
+                                .join("")}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        `;
+
+        // Hàm copy
+        window.copySummary = () => {
+            navigator.clipboard.writeText(data.summary);
+            alert("Đã copy vào clipboard!");
+        };
+
+    } catch (error) {
+        document.getElementById("result").innerHTML = `
+            <div class="alert alert-danger mt-3">
+                ❌ Lỗi: Không thể xử lý video.
+            </div>
+        `;
+    }
+});
+
+document.getElementById("type").addEventListener("change", function () {
+    const type = this.value;
+    const inputBox = document.getElementById("text_form");
+
+    if (type === "text") {
+        // đổi input -> textarea
+        const textarea = document.createElement("textarea");
+        textarea.id = "text_form";
+        textarea.className = "form-control form-control-lg mb-3";
+        textarea.rows = 6;
+        textarea.placeholder = "Nhập đoạn văn bản cần tóm tắt...";
+        textarea.required = true;
+        textarea.value = inputBox.value; // giữ lại giá trị cũ
+
+        inputBox.replaceWith(textarea);
+
+    } else {
+        // đổi textarea -> input
+        const input = document.createElement("input");
+        input.type = "text";
+        input.id = "text_form";
+        input.className = "form-control form-control-lg mb-3";
+        input.placeholder = "Nhập URL video YouTube...";
+        input.required = true;
+        input.value = inputBox.value; // giữ lại giá trị cũ
+
+        inputBox.replaceWith(input);
+    }
+});
+</script>
+
+</body>
+</html>

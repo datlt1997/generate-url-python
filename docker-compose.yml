@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: video-summarizer
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+      - ./downloads:/app/downloads
+    restart: unless-stopped

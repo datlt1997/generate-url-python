@@ -1,0 +1,21 @@
+faster-whisper
+flask
+pydub
+ffmpeg-python
+yt_dlp
+openai>=1.73.0
+transformers>=4.40.0
+dotenv
+google-generativeai
+torch
+fastapi
+gtts
+assemblyai
+# googletrans==4.0.0-rc1
+# transformers>=4.40.0
+
+
+
+# fastapi
+# uvicorn[standard]
+
