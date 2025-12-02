@@ -29,30 +29,21 @@ Bạn là một trợ lý AI tóm tắt nội dung.
 
 Nhiệm vụ của bạn:
 
-
 1. Đọc nội dung dưới đây (văn bản hoặc transcript video).
-2. Tạo đúng **một tiêu đề nội dung tóm tắt duy nhất** (tối đa 10 từ).
-3. Chia nội dung thành các phần chính, tối đa 4-5 phần, mỗi phần 4-5 câu.
-4. Trả về kết quả theo đúng định dạng HTML sau:
-
-<h2>Tiêu đề nội dung tóm tắt</h2>
-
-<h4>1. Tiêu đề phần 1</h4>
-<p>Nội dung phần 1</p>
-
-<h4>2. Tiêu đề phần 2</h4>
-<p>Nội dung phần 2</p>
-...
+2. Chỉ tạo **một tiêu đề tóm tắt duy nhất** (tối đa 10 từ) và đặt trong **một thẻ <h2> duy nhất ở đầu**.
+3. Sau đó, chia toàn bộ nội dung thành **tối đa 4–5 phần**, mỗi phần:
+   - Có một tiêu đề đặt trong thẻ <h4>.
+   - Có nội dung tóm tắt 4–5 câu đặt trong thẻ <p>.
+4. Tất cả nội dung phải được gộp lại vào **một cấu trúc tóm tắt duy nhất**, không chia thành nhiều nhóm, không tạo thêm <h2> khác.
 
 **QUY TẮC BẮT BUỘC:**
-- Chỉ được phép tạo **một thẻ <h2> duy nhất** ở đầu.
-- Tuyệt đối không được tạo thêm thẻ <h2> ở bất kỳ vị trí nào khác.
-- Mọi tiêu đề của phần phải dùng <h4>.
-- Mọi nội dung phần phải nằm trong <p>.
-- Không thêm mô tả, không thêm thẻ HTML khác.
-- Không được tự tạo nhóm nội dung lớn.
+- Chỉ được phép có **một thẻ <h2> duy nhất**.
+- Mỗi phần chỉ dùng thẻ <h4> cho tiêu đề và <p> cho nội dung.
+- Không tạo thêm bất kỳ thẻ HTML nào khác ngoài <h2>, <h4>, <p>.
+- Không chia nhỏ thành nhiều nhóm tóm tắt.
+- Dù nội dung đầu vào có dài, phân mảnh hay gồm nhiều chủ đề, bạn vẫn phải **kết hợp thành duy nhất 4–5 phần tổng quan**.
 
-Nội dung cần tóm tắt:
+Dữ liệu cần tóm tắt:
 \"\"\"{c}\"\"\"
 """
 
@@ -82,28 +73,20 @@ Bạn là một trợ lý AI tóm tắt nội dung.
 Nhiệm vụ của bạn:
 
 1. Đọc nội dung dưới đây (văn bản hoặc transcript video).
-2. Tạo đúng **một tiêu đề nội dung tóm tắt duy nhất** (tối đa 10 từ).
-3. Chia nội dung thành các phần chính, tối đa 4-5 phần, mỗi phần 4–5 câu.
-4. Trả về kết quả theo đúng định dạng HTML sau:
-
-<h2>Tiêu đề nội dung tóm tắt</h2>
-
-<h4>1. Tiêu đề phần 1</h4>
-<p>Nội dung phần 1</p>
-
-<h4>2. Tiêu đề phần 2</h4>
-<p>Nội dung phần 2</p>
-...
+2. Chỉ tạo **một tiêu đề tóm tắt duy nhất** (tối đa 10 từ) và đặt trong **một thẻ <h2> duy nhất ở đầu**.
+3. Sau đó, chia toàn bộ nội dung thành **tối đa 4–5 phần**, mỗi phần:
+   - Có một tiêu đề đặt trong thẻ <h4>.
+   - Có nội dung tóm tắt 4–5 câu đặt trong thẻ <p>.
+4. Tất cả nội dung phải được gộp lại vào **một cấu trúc tóm tắt duy nhất**, không chia thành nhiều nhóm, không tạo thêm <h2> khác.
 
 **QUY TẮC BẮT BUỘC:**
-- Chỉ được phép tạo **một thẻ <h2> duy nhất** ở đầu.
-- Tuyệt đối không được tạo thêm thẻ <h2> ở bất kỳ vị trí nào khác.
-- Mọi tiêu đề của phần phải dùng <h4>.
-- Mọi nội dung phần phải nằm trong <p>.
-- Không thêm mô tả, không thêm thẻ HTML khác.
-- Không được tự tạo nhóm nội dung lớn.
+- Chỉ được phép có **một thẻ <h2> duy nhất**.
+- Mỗi phần chỉ dùng thẻ <h4> cho tiêu đề và <p> cho nội dung.
+- Không tạo thêm bất kỳ thẻ HTML nào khác ngoài <h2>, <h4>, <p>.
+- Không chia nhỏ thành nhiều nhóm tóm tắt.
+- Dù nội dung đầu vào có dài, phân mảnh hay gồm nhiều chủ đề, bạn vẫn phải **kết hợp thành duy nhất 4–5 phần tổng quan**.
 
-Nội dung cần tóm tắt:
+Dữ liệu cần tóm tắt:
 \"\"\"{c}\"\"\"
 """
 

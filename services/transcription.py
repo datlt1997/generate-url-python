@@ -88,35 +88,37 @@ def transcribe_with_timestamps(audio_path):
             punctuate=True,
             format_text=True,
             speaker_labels=True,
-            filter_disfluencies=True,
-            language_code="vi"  # nếu muốn tiếng Việt
+            language_code="vi"
         )
     )
 
-    # transcript.words trả về list từ với timestamp
     timestamps = []
-    chunk = []
-    gap_threshold = 1.0  # giây
+    sentence = []
+    end_chars = {".", "?", "!", "…"}
 
-    last_end = 0
     for w in transcript.words:
         start_s = w.start / 1000
         end_s = w.end / 1000
-        if chunk and start_s - last_end > gap_threshold:
-            timestamps.append({
-                "start": round(chunk[0]['start'], 2),
-                "end": round(chunk[-1]['end'], 2),
-                "text": " ".join([c['text'] for c in chunk])
-            })
-            chunk = []
-        chunk.append({"text": w.text, "start": start_s, "end": end_s})
-        last_end = end_s
 
-    if chunk:
+        sentence.append({
+            "text": w.text,
+            "start": start_s,
+            "end": end_s
+        })
+
+        if any(w.text.endswith(ch) for ch in end_chars):
+            timestamps.append({
+                "start": round(sentence[0]["start"], 2),
+                "end": round(sentence[-1]["end"], 2),
+                "text": " ".join([x["text"] for x in sentence])
+            })
+            sentence = []
+
+    if sentence:
         timestamps.append({
-            "start": round(chunk[0]['start'], 2),
-            "end": round(chunk[-1]['end'], 2),
-            "text": " ".join([c['text'] for c in chunk])
+            "start": round(sentence[0]["start"], 2),
+            "end": round(sentence[-1]["end"], 2),
+            "text": " ".join([x["text"] for x in sentence])
         })
 
     return timestamps, transcript.text
