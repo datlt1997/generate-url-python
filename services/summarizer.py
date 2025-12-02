@@ -31,22 +31,24 @@ Nhiệm vụ của bạn:
 
 
 1. Đọc nội dung dưới đây (văn bản hoặc transcript video).
-2. Tạo đúng **một tiêu đề tổng duy nhất** (tối đa 10 từ).
-3. Chia nội dung thành các đoạn chính, mỗi đoạn 2–4 câu.
+2. Tạo đúng **một tiêu đề nội dung tóm tắt duy nhất** (tối đa 10 từ).
+3. Chia nội dung thành các phần chính, tối đa 4-5 phần, mỗi phần 4-5 câu.
 4. Trả về kết quả theo đúng định dạng HTML sau:
 
-<h2>Tiêu đề tổng</h2>
-<h3>1. Tiêu đề đoạn 1</h3>
-<p>Nội dung đoạn 1</p>
-<h3>2. Tiêu đề đoạn 2</h3>
-<p>Nội dung đoạn 2</p>
+<h2>Tiêu đề nội dung tóm tắt</h2>
+
+<h4>1. Tiêu đề phần 1</h4>
+<p>Nội dung phần 1</p>
+
+<h4>2. Tiêu đề phần 2</h4>
+<p>Nội dung phần 2</p>
 ...
 
 **QUY TẮC BẮT BUỘC:**
 - Chỉ được phép tạo **một thẻ <h2> duy nhất** ở đầu.
 - Tuyệt đối không được tạo thêm thẻ <h2> ở bất kỳ vị trí nào khác.
-- Mọi tiêu đề của đoạn phải dùng <h3>.
-- Mọi nội dung đoạn phải nằm trong <p>.
+- Mọi tiêu đề của phần phải dùng <h4>.
+- Mọi nội dung phần phải nằm trong <p>.
 - Không thêm mô tả, không thêm thẻ HTML khác.
 - Không được tự tạo nhóm nội dung lớn.
 
@@ -80,22 +82,24 @@ Bạn là một trợ lý AI tóm tắt nội dung.
 Nhiệm vụ của bạn:
 
 1. Đọc nội dung dưới đây (văn bản hoặc transcript video).
-2. Tạo đúng **một tiêu đề tổng duy nhất** (tối đa 10 từ).
-3. Chia nội dung thành các đoạn chính, mỗi đoạn 2–4 câu.
+2. Tạo đúng **một tiêu đề nội dung tóm tắt duy nhất** (tối đa 10 từ).
+3. Chia nội dung thành các phần chính, tối đa 4-5 phần, mỗi phần 4–5 câu.
 4. Trả về kết quả theo đúng định dạng HTML sau:
 
-<h2>Tiêu đề tổng</h2>
-<h3>1. Tiêu đề đoạn 1</h3>
-<p>Nội dung đoạn 1</p>
-<h3>2. Tiêu đề đoạn 2</h3>
-<p>Nội dung đoạn 2</p>
+<h2>Tiêu đề nội dung tóm tắt</h2>
+
+<h4>1. Tiêu đề phần 1</h4>
+<p>Nội dung phần 1</p>
+
+<h4>2. Tiêu đề phần 2</h4>
+<p>Nội dung phần 2</p>
 ...
 
 **QUY TẮC BẮT BUỘC:**
 - Chỉ được phép tạo **một thẻ <h2> duy nhất** ở đầu.
 - Tuyệt đối không được tạo thêm thẻ <h2> ở bất kỳ vị trí nào khác.
-- Mọi tiêu đề của đoạn phải dùng <h3>.
-- Mọi nội dung đoạn phải nằm trong <p>.
+- Mọi tiêu đề của phần phải dùng <h4>.
+- Mọi nội dung phần phải nằm trong <p>.
 - Không thêm mô tả, không thêm thẻ HTML khác.
 - Không được tự tạo nhóm nội dung lớn.
 

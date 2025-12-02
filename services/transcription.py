@@ -87,6 +87,8 @@ def transcribe_with_timestamps(audio_path):
         config=aai.TranscriptionConfig(
             punctuate=True,
             format_text=True,
+            speaker_labels=True,
+            filter_disfluencies=True,
             language_code="vi"  # nếu muốn tiếng Việt
         )
     )
