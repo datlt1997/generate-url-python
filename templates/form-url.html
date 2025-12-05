@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>YouTube Downloader</title>
+   <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f8fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            }
+
+        .container {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            width: 360px;
+            text-align: center;
+        }
+
+        h1 { margin-top: 0; font-size: 20px; }
+
+        input[type="url"] {
+            width: 100%;
+            padding: 10px;
+            margin: 12px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #4a76ff;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 15px;
+        }
+
+        .flash { margin-bottom: 8px; }
+        .msg { background: #ffeedd; padding: 8px; border-radius: 6px; color: #333; }
+
+        .note { color: #888; margin-top: 10px; font-size: 13px; }
+
+    </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Tải video YouTube</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">
+          {% for msg in messages %}
+            <div class="msg">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('download') }}" method="post">
+      <label for="url">Dán URL YouTube:</label>
+      <input type="url" id="url" name="url" placeholder="https://www.youtube.com/watch?v=..." required>
+      <button type="submit">Tải xuống</button>
+    </form>
+
+    <p class="note">Lưu ý: Chỉ tải video bạn có quyền tải xuống.</p>
+  </div>
+</body>
+</html>

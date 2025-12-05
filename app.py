@@ -1,12 +1,19 @@
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for, flash, after_this_request
 from services.downloader import download_audio, download_subtitles
 from services.transcription import transcribe_audio, transcribe_with_timestamps, format_timestamp
 from services.summarizer import chatgpt_summarize, gemini_summarize, gemini_text_to_audio
 import base64
 import re
+from pytubefix import YouTube
+from werkzeug.utils import secure_filename
+import os, uuid, subprocess
+import yt_dlp
 
 app = Flask(__name__)
+app.secret_key = "zzafqqweee"
+DOWNLOAD_FOLDER = "downloads"
+os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
 DOWNLOAD_DIR = "downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
@@ -95,6 +102,67 @@ def submit():
         "summary_audio": audio_base64
     })
 
+def clear_download_folder():
+    for file in os.listdir(DOWNLOAD_FOLDER):
+        try:
+            os.remove(os.path.join(DOWNLOAD_FOLDER, file))
+        except:
+            pass
+
+@app.route("/url", methods=["GET"])
+def url():
+    clear_download_folder() 
+    return render_template("form-url.html")
+
+@app.route("/download", methods=["POST"])
+def download():
+    url = request.form.get("url")
+
+    try:
+        yt = YouTube(url)
+
+        # Lấy video 720p (chỉ video)
+        video_stream = yt.streams.filter(progressive=False, file_extension="mp4").order_by("resolution").desc().first()
+        if not video_stream:
+            return "Không tìm thấy video 720p"
+
+        # Lấy audio (opus)
+        audio_stream = yt.streams.filter(only_audio=True).first()
+
+        # Tạo tên file tạm
+        video_temp = f"{uuid.uuid4()}_video.mp4"
+        audio_temp = f"{uuid.uuid4()}_audio.webm"
+        final_file = f"{uuid.uuid4()}.mp4"
+
+        # Tải video + audio
+        video_stream.download(output_path=DOWNLOAD_FOLDER, filename=video_temp)
+        audio_stream.download(output_path=DOWNLOAD_FOLDER, filename=audio_temp)
+
+        # Merge bằng FFmpeg -> xuất file .mp4 chuẩn (H.264 + AAC)
+        input_video = os.path.join(DOWNLOAD_FOLDER, video_temp)
+        input_audio = os.path.join(DOWNLOAD_FOLDER, audio_temp)
+        output_final = os.path.join(DOWNLOAD_FOLDER, final_file)
+
+        ffmpeg_cmd = [
+            "ffmpeg",
+            "-i", input_video,
+            "-i", input_audio,
+            "-c:v", "copy",
+            "-c:a", "aac",
+            "-strict", "experimental",
+            output_final
+        ]
+
+        subprocess.run(ffmpeg_cmd, check=True)
+
+        # Xóa file tạm
+        os.remove(input_video)
+        os.remove(input_audio)
+        return send_file(output_final, as_attachment=True)
+
+    except Exception as e:
+        flash(f"Lỗi khi tải xuống: {e}")
+        return redirect(url_for("url"))
 
 
 if __name__ == "__main__":
