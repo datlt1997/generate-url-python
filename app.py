@@ -116,6 +116,7 @@ def url():
 
 @app.route("/download", methods=["POST"])
 def download():
+    clear_download_folder() 
     url = request.form.get("url")
 
     try:
