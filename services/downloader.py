@@ -23,7 +23,6 @@ def download_subtitles(url, out_dir):
         info = ydl.extract_info(url, download=False)
         if info.get("subtitles") or info.get("automatic_captions"):
             ydl.download([url])
-            # lấy file srt vừa tải
             for lang in ["en", "en-US", "vi"]:
                 path = os.path.join(out_dir, f"{uid}.{lang}.srt")
                 if os.path.exists(path):

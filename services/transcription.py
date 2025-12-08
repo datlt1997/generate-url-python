@@ -3,16 +3,13 @@ from pydub import AudioSegment, silence
 import assemblyai as aai
 
 def transcribe_audio(audio_path):
-    # ----- 1. Load model -----
-    # bạn có thể đổi tiny, base, small, medium, large-v3
-    model = WhisperModel("base", device="cpu")   # nếu có GPU: device="cuda"
+    model = WhisperModel("base", device="cpu")
 
-    # ----- 2. Cắt audio theo im lặng -----
     audio = AudioSegment.from_file(audio_path)
 
     chunks = silence.split_on_silence(
         audio,
-        min_silence_len=250,                # ngắt khi im lặng 0.1s
+        min_silence_len=250,
         silence_thresh=audio.dBFS - 16,
         keep_silence=200
     )
@@ -20,11 +17,10 @@ def transcribe_audio(audio_path):
     timestamps = []
     texts = []
 
-    current_time = 0  # thời gian tích lũy
+    current_time = 0
 
-    # ----- 3. Xử lý từng chunk -----
     for chunk in chunks:
-        duration = len(chunk) / 1000.0  # ms -> giây
+        duration = len(chunk) / 1000.0
 
         start = current_time
         end = current_time + duration
@@ -32,7 +28,6 @@ def transcribe_audio(audio_path):
         temp_name = "_temp_chunk.wav"
         chunk.export(temp_name, format="wav")
 
-        # ----- 4. faster-whisper: transcribe -----
         segments, info = model.transcribe(
             temp_name,
             beam_size=5,
@@ -40,7 +35,6 @@ def transcribe_audio(audio_path):
             language="vi"
         )
 
-        # faster_whisper trả về nhiều segments, nên phải nối lại
         text = " ".join([seg.text for seg in segments]).strip()
 
         if text.strip() == "":
