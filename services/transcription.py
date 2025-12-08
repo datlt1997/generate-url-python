@@ -2,8 +2,10 @@ from faster_whisper import WhisperModel
 from pydub import AudioSegment, silence
 import assemblyai as aai
 
+model_path = "models/faster-whisper-small"
+
 def transcribe_audio(audio_path):
-    model = WhisperModel("base", device="cpu")
+    model = WhisperModel(model_path, device="cpu", compute_type="int8")
 
     audio = AudioSegment.from_file(audio_path)
 

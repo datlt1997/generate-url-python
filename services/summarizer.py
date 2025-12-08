@@ -100,8 +100,6 @@ Dữ liệu cần tóm tắt:
 def gemini_text_to_audio(text, output_path="summary_gemini.wav"):
     print("==== Bắt đầu chuyển text sang audio ====", flush=True)
     
-    print(f"Text gửi sang TTS:\n{text[:200]}{'...' if len(text) > 200 else ''}", flush=True)
-    
     tts = gTTS(text=text, lang='vi')
     fp = BytesIO()
     tts.write_to_fp(fp)
